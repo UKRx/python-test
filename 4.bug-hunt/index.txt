@@ -1,0 +1,33 @@
+import React, { useEffect, useState } from "react";
+function Timer() {
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds(seconds + 1);
+    }, 1000);
+    return () => clearTimeout(interval);
+  }, []);
+  return <div>Time: {seconds} seconds</div>;
+}
+
+=======
+
+1. seconds + 1 will not work because need to get prev state
+2. clearTimeOut will not work so memory will leak and code stuck becase above code defiend setInterval must be use clearInterval
+3. no export function in react will be runtime error
+
+fixed code: 
+
+import React, { useEffect, useState } from "react";
+function Timer() {
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds(prev => prev + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return <div>Time: {seconds} seconds</div>;
+}
+
+export default Timer
